@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:mongol_flutter_markdown/mongol_flutter_markdown.dart';
 
 import '../shared/markdown_demo_widget.dart';
 import '../shared/markdown_extensions.dart';

@@ -4,6 +4,7 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:mongol/mongol.dart';
 import 'package:markdown/markdown.dart' as md;
 
 import '_functions_io.dart' if (dart.library.html) '_functions_web.dart';
@@ -831,10 +832,11 @@ class MarkdownBuilder implements md.NodeVisitor {
         key: k,
       );
     } else {
-      return RichText(
+      return MongolRichText(
         text: text!,
         textScaleFactor: styleSheet.textScaleFactor!,
-        textAlign: textAlign ?? TextAlign.start,
+        // textAlign: textAlign ?? MongolTextAlign.top,
+        textAlign: MongolTextAlign.top,
         key: k,
       );
     }

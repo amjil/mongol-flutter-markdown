@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:markdown/markdown.dart' as md;
 
-import '../flutter_markdown.dart';
+import '../mongol_flutter_markdown.dart';
 import '_functions_io.dart' if (dart.library.html) '_functions_web.dart';
 
 /// Signature for callbacks used by [MarkdownWidget] when the user taps a link.
@@ -425,7 +425,7 @@ class MarkdownBody extends MarkdownWidget {
     if (children!.length == 1 && shrinkWrap) {
       return children.single;
     }
-    return Column(
+    return Row(
       mainAxisSize: shrinkWrap ? MainAxisSize.min : MainAxisSize.max,
       crossAxisAlignment:
           fitContent ? CrossAxisAlignment.start : CrossAxisAlignment.stretch,
