@@ -3,6 +3,8 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:mongol/mongol.dart';
 import 'package:mongol_flutter_markdown/mongol_flutter_markdown.dart';
 
 import '../shared/markdown_demo_widget.dart';
@@ -56,7 +58,8 @@ class DemoFormattedView extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 1250),
+        constraints: const BoxConstraints(maxHeight: 500),
+        // constraints: const BoxConstraints(),
         child: child,
       ),
     );
@@ -75,9 +78,10 @@ class DemoRawDataView extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              child: Text(
+              child: MongolText(
                 snapshot.data!,
                 softWrap: true,
                 style: Theme.of(context)
@@ -125,24 +129,25 @@ class DemoNotesView extends StatelessWidget {
       AlertDialog(
         title: const Text('Reference Link'),
         content: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
           child: ListBody(
             children: <Widget>[
-              Text(
+              MongolText(
                 'See the following link for more information:',
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
-              const SizedBox(height: 8),
-              Text(
+              const SizedBox(width: 8),
+              MongolText(
                 'Link text: $text',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              const SizedBox(height: 8),
-              Text(
+              const SizedBox(width: 8),
+              MongolText(
                 'Link destination: $href',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              const SizedBox(height: 8),
-              Text(
+              const SizedBox(width: 8),
+              MongolText(
                 'Link title: $title',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),

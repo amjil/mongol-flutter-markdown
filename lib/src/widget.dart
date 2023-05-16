@@ -496,6 +496,7 @@ class Markdown extends MarkdownWidget {
   @override
   Widget build(BuildContext context, List<Widget>? children) {
     return ListView(
+      scrollDirection: Axis.horizontal,
       padding: padding,
       controller: controller,
       physics: physics,

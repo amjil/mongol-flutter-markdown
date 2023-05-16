@@ -365,7 +365,7 @@ class MarkdownBuilder implements md.NodeVisitor {
       Widget child;
 
       if (current.children.isNotEmpty) {
-        child = Column(
+        child = Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: fitContent
               ? CrossAxisAlignment.start
@@ -469,21 +469,21 @@ class MarkdownBuilder implements md.NodeVisitor {
         ));
       } else if (tag == 'br') {
         current.children.add(_buildRichText(const TextSpan(text: '\n')));
-      } else if (tag == 'th' || tag == 'td') {
-        TextAlign? align;
+      } /*else if (tag == 'th' || tag == 'td') {
+        MongolTextAlign? align;
         final String? alignAttribute = element.attributes['align'];
         if (alignAttribute == null) {
-          align = tag == 'th' ? styleSheet.tableHeadAlign : TextAlign.left;
+          align = tag == 'th' ? styleSheet.tableHeadAlign : MongolTextAlign.top;
         } else {
           switch (alignAttribute) {
             case 'left':
-              align = TextAlign.left;
+              align = MongolTextAlign.top;
               break;
             case 'center':
-              align = TextAlign.center;
+              align = MongolTextAlign.center;
               break;
             case 'right':
-              align = TextAlign.right;
+              align = MongolTextAlign.bottom;
               break;
           }
         }
@@ -492,7 +492,7 @@ class MarkdownBuilder implements md.NodeVisitor {
           textAlign: align,
         );
         _ambiguate(_tables.single.rows.last.children)!.add(child);
-      } else if (tag == 'a') {
+      }*/ else if (tag == 'a') {
         _linkHandlers.removeLast();
       }
 
@@ -569,9 +569,9 @@ class MarkdownBuilder implements md.NodeVisitor {
     if (isUnordered) {
       return Padding(
         padding: styleSheet.listBulletPadding!,
-        child: Text(
+        child: MongolText(
           '•',
-          textAlign: TextAlign.center,
+          textAlign: MongolTextAlign.center,
           style: styleSheet.listBullet,
         ),
       );
@@ -579,15 +579,15 @@ class MarkdownBuilder implements md.NodeVisitor {
 
     return Padding(
       padding: styleSheet.listBulletPadding!,
-      child: Text(
+      child: MongolText(
         '${index + 1}.',
-        textAlign: TextAlign.right,
+        textAlign: MongolTextAlign.bottom,
         style: styleSheet.listBullet,
       ),
     );
   }
 
-  Widget _buildTableCell(List<Widget?> children, {TextAlign? textAlign}) {
+  /*Widget _buildTableCell(List<Widget?> children, {MongolTextAlign? textAlign}) {
     return TableCell(
       child: Padding(
         padding: styleSheet.tableCellsPadding!,
@@ -598,7 +598,7 @@ class MarkdownBuilder implements md.NodeVisitor {
         ),
       ),
     );
-  }
+  }*/
 
   Widget _buildPadding(EdgeInsets padding, Widget child) {
     if (padding == EdgeInsets.zero) {
@@ -632,7 +632,7 @@ class MarkdownBuilder implements md.NodeVisitor {
     }
 
     WrapAlignment blockAlignment = WrapAlignment.start;
-    TextAlign textAlign = TextAlign.start;
+    MongolTextAlign textAlign = MongolTextAlign.top;
     EdgeInsets textPadding = EdgeInsets.zero;
     if (_isBlockTag(_currentBlockTag)) {
       blockAlignment = _wrapAlignmentForBlockTag(_currentBlockTag);
@@ -670,14 +670,14 @@ class MarkdownBuilder implements md.NodeVisitor {
   /// Merges adjacent [TextSpan] children
   List<Widget> _mergeInlineChildren(
     List<Widget> children,
-    TextAlign? textAlign,
+    MongolTextAlign? textAlign,
   ) {
     final List<Widget> mergedTexts = <Widget>[];
     for (final Widget child in children) {
       if (mergedTexts.isNotEmpty &&
-          mergedTexts.last is RichText &&
-          child is RichText) {
-        final RichText previous = mergedTexts.removeLast() as RichText;
+          mergedTexts.last is MongolRichText &&
+          child is MongolRichText) {
+        final MongolRichText previous = mergedTexts.removeLast() as MongolRichText;
         final TextSpan previousTextSpan = previous.text as TextSpan;
         final List<TextSpan> children = previousTextSpan.children != null
             ? previousTextSpan.children!
@@ -718,21 +718,21 @@ class MarkdownBuilder implements md.NodeVisitor {
     return mergedTexts;
   }
 
-  TextAlign _textAlignForBlockTag(String? blockTag) {
+  MongolTextAlign _textAlignForBlockTag(String? blockTag) {
     final WrapAlignment wrapAlignment = _wrapAlignmentForBlockTag(blockTag);
     switch (wrapAlignment) {
       case WrapAlignment.start:
-        return TextAlign.start;
+        return MongolTextAlign.top;
       case WrapAlignment.center:
-        return TextAlign.center;
+        return MongolTextAlign.center;
       case WrapAlignment.end:
-        return TextAlign.end;
+        return MongolTextAlign.bottom;
       case WrapAlignment.spaceAround:
-        return TextAlign.justify;
+        return MongolTextAlign.justify;
       case WrapAlignment.spaceBetween:
-        return TextAlign.justify;
+        return MongolTextAlign.justify;
       case WrapAlignment.spaceEvenly:
-        return TextAlign.justify;
+        return MongolTextAlign.justify;
     }
   }
 
@@ -820,26 +820,30 @@ class MarkdownBuilder implements md.NodeVisitor {
         : TextSpan(children: mergedSpans);
   }
 
-  Widget _buildRichText(TextSpan? text, {TextAlign? textAlign, String? key}) {
+  Widget _buildRichText(TextSpan? text, {MongolTextAlign? textAlign, String? key}) {
     //Adding a unique key prevents the problem of using the same link handler for text spans with the same text
     final Key k = key == null ? UniqueKey() : Key(key);
-    if (selectable) {
-      return SelectableText.rich(
-        text!,
-        textScaleFactor: styleSheet.textScaleFactor,
-        textAlign: textAlign ?? TextAlign.start,
-        onTap: onTapText,
-        key: k,
-      );
-    } else {
-      return MongolRichText(
-        text: text!,
+    // if (selectable) {
+      // return SelectableText.rich(
+        // text!,
+        // textScaleFactor: styleSheet.textScaleFactor,
+        // textAlign: textAlign ?? MongolTextAlign.start,
+        // onTap: onTapText,
+        // key: k,
+      // );
+    // } else {
+      // return RichText(
+      // return MongolRichText(
+      return MongolText.rich(
+        text!, 
+        // textSpan: text!,
         textScaleFactor: styleSheet.textScaleFactor!,
         // textAlign: textAlign ?? MongolTextAlign.top,
-        textAlign: MongolTextAlign.top,
+        // textAlign: MongolTextAlign.top,
+        // textAlign: TextAlign.left,
         key: k,
       );
-    }
+    // }
   }
 
   /// This allows a value of type T or T? to be treated as a value of type T?.
