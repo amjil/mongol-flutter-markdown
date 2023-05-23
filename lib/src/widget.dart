@@ -426,9 +426,11 @@ class MarkdownBody extends MarkdownWidget {
       return children.single;
     }
     return Row(
-      mainAxisSize: shrinkWrap ? MainAxisSize.min : MainAxisSize.max,
+      // mainAxisSize: shrinkWrap ? MainAxisSize.min : MainAxisSize.max,
+      mainAxisSize:  MainAxisSize.min,
       crossAxisAlignment:
-          fitContent ? CrossAxisAlignment.start : CrossAxisAlignment.stretch,
+          // fitContent ? CrossAxisAlignment.start : CrossAxisAlignment.stretch,
+          CrossAxisAlignment.start,
       children: children,
     );
   }

@@ -104,9 +104,9 @@ class MarkdownBuilder implements md.NodeVisitor {
     required this.builders,
     required this.paddingBuilders,
     required this.listItemCrossAxisAlignment,
-    this.fitContent = false,
+    this.fitContent = true,
     this.onTapText,
-    this.softLineBreak = false,
+    this.softLineBreak = true,
   });
 
   /// A delegate that controls how link and `pre` elements behave.
@@ -594,7 +594,10 @@ class MarkdownBuilder implements md.NodeVisitor {
         child: DefaultTextStyle(
           style: styleSheet.tableBody!,
           textAlign: textAlign,
-          child: Wrap(children: children as List<Widget>),
+          child: Wrap(
+              direction: Axis.horizontal,
+              children: children as List<Widget>,
+            ),
         ),
       ),
     );
@@ -651,6 +654,7 @@ class MarkdownBuilder implements md.NodeVisitor {
         textAlign,
       );
       final Wrap wrap = Wrap(
+        direction: Axis.vertical,
         crossAxisAlignment: WrapCrossAlignment.center,
         alignment: blockAlignment,
         children: mergedInlines,
@@ -834,14 +838,22 @@ class MarkdownBuilder implements md.NodeVisitor {
     // } else {
       // return RichText(
       // return MongolRichText(
-      return MongolText.rich(
-        text!, 
-        // textSpan: text!,
-        textScaleFactor: styleSheet.textScaleFactor!,
-        // textAlign: textAlign ?? MongolTextAlign.top,
-        // textAlign: MongolTextAlign.top,
-        // textAlign: TextAlign.left,
-        key: k,
+      return 
+      SizedBox(
+        // height: 500,
+      // FittedBox(
+        // fit: BoxFit.contain,
+        child: MongolRichText(
+        // child: MongolText.rich(
+        //   text!, 
+          text: text!,
+          textScaleFactor: styleSheet.textScaleFactor!,
+          maxLines: null,
+          // textAlign: textAlign ?? MongolTextAlign.top,
+          // textAlign: MongolTextAlign.top,
+          // textAlign: TextAlign.left,
+          key: k,
+        ),
       );
     // }
   }

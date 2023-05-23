@@ -117,7 +117,7 @@ class MarkdownStyleSheet {
       blockSpacing: 8.0,
       listIndent: 24.0,
       listBullet: theme.textTheme.bodyMedium,
-      listBulletPadding: const EdgeInsets.only(right: 4),
+      listBulletPadding: const EdgeInsets.only(bottom: 4),
       tableHead: const TextStyle(fontWeight: FontWeight.w600),
       tableBody: theme.textTheme.bodyMedium,
       tableHeadAlign: TextAlign.center,
@@ -125,7 +125,7 @@ class MarkdownStyleSheet {
         color: theme.dividerColor,
       ),
       tableColumnWidth: const FlexColumnWidth(),
-      tableCellsPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+      tableCellsPadding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
       tableCellsDecoration: const BoxDecoration(),
       blockquotePadding: const EdgeInsets.all(8.0),
       blockquoteDecoration: BoxDecoration(
@@ -212,7 +212,7 @@ class MarkdownStyleSheet {
       blockSpacing: 8,
       listIndent: 24,
       listBullet: theme.textTheme.textStyle,
-      listBulletPadding: const EdgeInsets.only(right: 4),
+      listBulletPadding: const EdgeInsets.only(bottom: 4),
       tableHead: theme.textTheme.textStyle.copyWith(
         fontWeight: FontWeight.w600,
       ),
@@ -220,7 +220,7 @@ class MarkdownStyleSheet {
       tableHeadAlign: TextAlign.center,
       tableBorder: TableBorder.all(color: CupertinoColors.separator, width: 0),
       tableColumnWidth: const FlexColumnWidth(),
-      tableCellsPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+      tableCellsPadding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
       tableCellsDecoration: BoxDecoration(
         color: theme.brightness == Brightness.dark
             ? CupertinoColors.systemGrey6.darkColor
@@ -295,7 +295,7 @@ class MarkdownStyleSheet {
       blockSpacing: 8.0,
       listIndent: 24.0,
       listBullet: theme.textTheme.bodyMedium,
-      listBulletPadding: const EdgeInsets.only(right: 4),
+      listBulletPadding: const EdgeInsets.only(bottom: 4),
       tableHead: const TextStyle(fontWeight: FontWeight.w600),
       tableBody: theme.textTheme.bodyMedium,
       tableHeadAlign: TextAlign.center,
@@ -303,7 +303,7 @@ class MarkdownStyleSheet {
         color: theme.dividerColor,
       ),
       tableColumnWidth: const FlexColumnWidth(),
-      tableCellsPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+      tableCellsPadding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
       tableCellsDecoration: const BoxDecoration(),
       blockquotePadding: const EdgeInsets.all(8.0),
       blockquoteDecoration: BoxDecoration(
