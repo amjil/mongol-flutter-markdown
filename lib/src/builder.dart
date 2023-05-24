@@ -392,19 +392,19 @@ class MarkdownBuilder implements md.NodeVisitor {
           } else {
             bullet = _buildBullet(_listIndents.last);
           }
-          child = Row(
+          child = Column(
             mainAxisSize: fitContent ? MainAxisSize.min : MainAxisSize.max,
             textBaseline: listItemCrossAxisAlignment ==
                     MarkdownListItemCrossAxisAlignment.start
                 ? null
                 : TextBaseline.alphabetic,
-            crossAxisAlignment: listItemCrossAxisAlignment ==
+            /*crossAxisAlignment: listItemCrossAxisAlignment ==
                     MarkdownListItemCrossAxisAlignment.start
                 ? CrossAxisAlignment.start
-                : CrossAxisAlignment.baseline,
+                : CrossAxisAlignment.baseline,*/
             children: <Widget>[
               SizedBox(
-                width: styleSheet.listIndent! +
+                height: styleSheet.listIndent! +
                     styleSheet.listBulletPadding!.left +
                     styleSheet.listBulletPadding!.right,
                 child: bullet,
@@ -554,7 +554,7 @@ class MarkdownBuilder implements md.NodeVisitor {
         padding: styleSheet.listBulletPadding!,
         child: MongolText(
           '•',
-          textAlign: MongolTextAlign.center,
+          textAlign: MongolTextAlign.top,
           style: styleSheet.listBullet,
         ),
       );
@@ -564,7 +564,7 @@ class MarkdownBuilder implements md.NodeVisitor {
       padding: styleSheet.listBulletPadding!,
       child: MongolText(
         '${index + 1}.',
-        textAlign: MongolTextAlign.bottom,
+        textAlign: MongolTextAlign.top,
         style: styleSheet.listBullet,
       ),
     );
