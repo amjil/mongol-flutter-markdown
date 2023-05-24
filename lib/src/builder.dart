@@ -104,9 +104,9 @@ class MarkdownBuilder implements md.NodeVisitor {
     required this.builders,
     required this.paddingBuilders,
     required this.listItemCrossAxisAlignment,
-    this.fitContent = true,
+    this.fitContent = false,
     this.onTapText,
-    this.softLineBreak = true,
+    this.softLineBreak = false,
   });
 
   /// A delegate that controls how link and `pre` elements behave.
@@ -839,22 +839,14 @@ class MarkdownBuilder implements md.NodeVisitor {
       // return RichText(
       // return MongolRichText(
       return 
-      SizedBox(
-        // height: 500,
-      // FittedBox(
-        // fit: BoxFit.contain,
-        child: MongolRichText(
-        // child: MongolText.rich(
-        //   text!, 
+        MongolRichText(
           text: text!,
           textScaleFactor: styleSheet.textScaleFactor!,
           maxLines: null,
-          // textAlign: textAlign ?? MongolTextAlign.top,
-          // textAlign: MongolTextAlign.top,
-          // textAlign: TextAlign.left,
+          textAlign: textAlign ?? MongolTextAlign.top,
           key: k,
-        ),
-      );
+        )
+      ;
     // }
   }
 
