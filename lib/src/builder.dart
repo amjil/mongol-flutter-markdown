@@ -469,30 +469,13 @@ class MarkdownBuilder implements md.NodeVisitor {
         ));
       } else if (tag == 'br') {
         current.children.add(_buildRichText(const TextSpan(text: '\n')));
-      } /*else if (tag == 'th' || tag == 'td') {
-        MongolTextAlign? align;
+      } else if (tag == 'th' || tag == 'td') {
         final String? alignAttribute = element.attributes['align'];
-        if (alignAttribute == null) {
-          align = tag == 'th' ? styleSheet.tableHeadAlign : MongolTextAlign.top;
-        } else {
-          switch (alignAttribute) {
-            case 'left':
-              align = MongolTextAlign.top;
-              break;
-            case 'center':
-              align = MongolTextAlign.center;
-              break;
-            case 'right':
-              align = MongolTextAlign.bottom;
-              break;
-          }
-        }
         final Widget child = _buildTableCell(
-          _mergeInlineChildren(current.children, align),
-          textAlign: align,
+          _mergeInlineChildren(current.children, MongolTextAlign.top),
         );
         _ambiguate(_tables.single.rows.last.children)!.add(child);
-      }*/ else if (tag == 'a') {
+      } else if (tag == 'a') {
         _linkHandlers.removeLast();
       }
 
@@ -587,21 +570,17 @@ class MarkdownBuilder implements md.NodeVisitor {
     );
   }
 
-  /*Widget _buildTableCell(List<Widget?> children, {MongolTextAlign? textAlign}) {
+  Widget _buildTableCell(List<Widget?> children) {
     return TableCell(
       child: Padding(
         padding: styleSheet.tableCellsPadding!,
-        child: DefaultTextStyle(
-          style: styleSheet.tableBody!,
-          textAlign: textAlign,
-          child: Wrap(
-              direction: Axis.horizontal,
-              children: children as List<Widget>,
-            ),
+        child: Wrap(
+          direction: Axis.horizontal,
+          children: children as List<Widget>,
         ),
       ),
     );
-  }*/
+  }
 
   Widget _buildPadding(EdgeInsets padding, Widget child) {
     if (padding == EdgeInsets.zero) {
