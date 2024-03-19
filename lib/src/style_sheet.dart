@@ -42,6 +42,7 @@ class MarkdownStyleSheet {
     this.tableColumnWidth,
     this.tableCellsPadding,
     this.tableCellsDecoration,
+    this.tableVerticalAlignment = TableCellVerticalAlignment.middle,
     this.blockquotePadding,
     this.blockquoteDecoration,
     this.codeblockPadding,
@@ -58,8 +59,19 @@ class MarkdownStyleSheet {
     this.orderedListAlign = WrapAlignment.start,
     this.blockquoteAlign = WrapAlignment.start,
     this.codeblockAlign = WrapAlignment.start,
-    this.textScaleFactor,
-  }) : _styles = <String, TextStyle?>{
+    @Deprecated('Use textScaler instead.') this.textScaleFactor,
+    TextScaler? textScaler,
+  })  : assert(
+          textScaler == null || textScaleFactor == null,
+          'textScaleFactor is deprecated and cannot be specified when textScaler is specified.',
+        ),
+        textScaler = textScaler ??
+            // Internally, only textScaler is used, so convert the scale factor
+            // to a linear scaler.
+            (textScaleFactor == null
+                ? null
+                : TextScaler.linear(textScaleFactor)),
+        _styles = <String, TextStyle?>{
           'a': a,
           'p': p,
           'li': p,
@@ -117,7 +129,7 @@ class MarkdownStyleSheet {
       blockSpacing: 8.0,
       listIndent: 24.0,
       listBullet: theme.textTheme.bodyMedium,
-      listBulletPadding: const EdgeInsets.only(bottom: 4),
+      listBulletPadding: const EdgeInsets.only(right: 4),
       tableHead: const TextStyle(fontWeight: FontWeight.w600),
       tableBody: theme.textTheme.bodyMedium,
       tableHeadAlign: TextAlign.center,
@@ -125,7 +137,7 @@ class MarkdownStyleSheet {
         color: theme.dividerColor,
       ),
       tableColumnWidth: const FlexColumnWidth(),
-      tableCellsPadding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
+      tableCellsPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       tableCellsDecoration: const BoxDecoration(),
       blockquotePadding: const EdgeInsets.all(8.0),
       blockquoteDecoration: BoxDecoration(
@@ -212,7 +224,7 @@ class MarkdownStyleSheet {
       blockSpacing: 8,
       listIndent: 24,
       listBullet: theme.textTheme.textStyle,
-      listBulletPadding: const EdgeInsets.only(bottom: 4),
+      listBulletPadding: const EdgeInsets.only(right: 4),
       tableHead: theme.textTheme.textStyle.copyWith(
         fontWeight: FontWeight.w600,
       ),
@@ -220,7 +232,7 @@ class MarkdownStyleSheet {
       tableHeadAlign: TextAlign.center,
       tableBorder: TableBorder.all(color: CupertinoColors.separator, width: 0),
       tableColumnWidth: const FlexColumnWidth(),
-      tableCellsPadding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
+      tableCellsPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       tableCellsDecoration: BoxDecoration(
         color: theme.brightness == Brightness.dark
             ? CupertinoColors.systemGrey6.darkColor
@@ -295,7 +307,7 @@ class MarkdownStyleSheet {
       blockSpacing: 8.0,
       listIndent: 24.0,
       listBullet: theme.textTheme.bodyMedium,
-      listBulletPadding: const EdgeInsets.only(bottom: 4),
+      listBulletPadding: const EdgeInsets.only(right: 4),
       tableHead: const TextStyle(fontWeight: FontWeight.w600),
       tableBody: theme.textTheme.bodyMedium,
       tableHeadAlign: TextAlign.center,
@@ -303,7 +315,7 @@ class MarkdownStyleSheet {
         color: theme.dividerColor,
       ),
       tableColumnWidth: const FlexColumnWidth(),
-      tableCellsPadding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
+      tableCellsPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       tableCellsDecoration: const BoxDecoration(),
       blockquotePadding: const EdgeInsets.all(8.0),
       blockquoteDecoration: BoxDecoration(
@@ -362,6 +374,7 @@ class MarkdownStyleSheet {
     TableColumnWidth? tableColumnWidth,
     EdgeInsets? tableCellsPadding,
     Decoration? tableCellsDecoration,
+    TableCellVerticalAlignment? tableVerticalAlignment,
     EdgeInsets? blockquotePadding,
     Decoration? blockquoteDecoration,
     EdgeInsets? codeblockPadding,
@@ -378,8 +391,19 @@ class MarkdownStyleSheet {
     WrapAlignment? orderedListAlign,
     WrapAlignment? blockquoteAlign,
     WrapAlignment? codeblockAlign,
-    double? textScaleFactor,
+    @Deprecated('Use textScaler instead.') double? textScaleFactor,
+    TextScaler? textScaler,
   }) {
+    assert(
+      textScaler == null || textScaleFactor == null,
+      'textScaleFactor is deprecated and cannot be specified when textScaler is specified.',
+    );
+    // If either of textScaler or textScaleFactor is non-null, pass null for the
+    // other instead of the previous value, since only one is allowed.
+    final TextScaler? newTextScaler =
+        textScaler ?? (textScaleFactor == null ? this.textScaler : null);
+    final double? nextTextScaleFactor =
+        textScaleFactor ?? (textScaler == null ? this.textScaleFactor : null);
     return MarkdownStyleSheet(
       a: a ?? this.a,
       p: p ?? this.p,
@@ -414,6 +438,8 @@ class MarkdownStyleSheet {
       tableColumnWidth: tableColumnWidth ?? this.tableColumnWidth,
       tableCellsPadding: tableCellsPadding ?? this.tableCellsPadding,
       tableCellsDecoration: tableCellsDecoration ?? this.tableCellsDecoration,
+      tableVerticalAlignment:
+          tableVerticalAlignment ?? this.tableVerticalAlignment,
       blockquotePadding: blockquotePadding ?? this.blockquotePadding,
       blockquoteDecoration: blockquoteDecoration ?? this.blockquoteDecoration,
       codeblockPadding: codeblockPadding ?? this.codeblockPadding,
@@ -431,7 +457,8 @@ class MarkdownStyleSheet {
       orderedListAlign: orderedListAlign ?? this.orderedListAlign,
       blockquoteAlign: blockquoteAlign ?? this.blockquoteAlign,
       codeblockAlign: codeblockAlign ?? this.codeblockAlign,
-      textScaleFactor: textScaleFactor ?? this.textScaleFactor,
+      textScaler: newTextScaler,
+      textScaleFactor: nextTextScaleFactor,
     );
   }
 
@@ -475,6 +502,7 @@ class MarkdownStyleSheet {
       tableColumnWidth: other.tableColumnWidth,
       tableCellsPadding: other.tableCellsPadding,
       tableCellsDecoration: other.tableCellsDecoration,
+      tableVerticalAlignment: other.tableVerticalAlignment,
       blockquotePadding: other.blockquotePadding,
       blockquoteDecoration: other.blockquoteDecoration,
       codeblockPadding: other.codeblockPadding,
@@ -492,6 +520,11 @@ class MarkdownStyleSheet {
       blockquoteAlign: other.blockquoteAlign,
       codeblockAlign: other.codeblockAlign,
       textScaleFactor: other.textScaleFactor,
+      // Only one of textScaler and textScaleFactor can be passed. If
+      // other.textScaleFactor is non-null, then the sheet was created with a
+      // textScaleFactor and the textScaler was derived from that, so should be
+      // ignored so that the textScaleFactor continues to be set.
+      textScaler: other.textScaleFactor == null ? other.textScaler : null,
     );
   }
 
@@ -594,6 +627,9 @@ class MarkdownStyleSheet {
   /// The decoration to use for `th` and `td` elements.
   final Decoration? tableCellsDecoration;
 
+  /// The [TableCellVerticalAlignment] to use for `th` and `td` elements.
+  final TableCellVerticalAlignment tableVerticalAlignment;
+
   /// The padding to use for `blockquote` elements.
   final EdgeInsets? blockquotePadding;
 
@@ -642,7 +678,14 @@ class MarkdownStyleSheet {
   /// The [WrapAlignment] to use for a code block. Defaults to start.
   final WrapAlignment codeblockAlign;
 
-  /// The text scale factor to use in textual elements
+  /// The text scaler to use in textual elements.
+  final TextScaler? textScaler;
+
+  /// The text scale factor to use in textual elements.
+  ///
+  /// This will be non-null only if the sheet was created with the deprecated
+  /// [textScaleFactor] instead of [textScaler].
+  @Deprecated('Use textScaler instead.')
   final double? textScaleFactor;
 
   /// A [Map] from element name to the corresponding [TextStyle] object.
@@ -651,7 +694,7 @@ class MarkdownStyleSheet {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
@@ -692,6 +735,7 @@ class MarkdownStyleSheet {
         other.tableColumnWidth == tableColumnWidth &&
         other.tableCellsPadding == tableCellsPadding &&
         other.tableCellsDecoration == tableCellsDecoration &&
+        other.tableVerticalAlignment == tableVerticalAlignment &&
         other.blockquotePadding == blockquotePadding &&
         other.blockquoteDecoration == blockquoteDecoration &&
         other.codeblockPadding == codeblockPadding &&
@@ -708,7 +752,7 @@ class MarkdownStyleSheet {
         other.orderedListAlign == orderedListAlign &&
         other.blockquoteAlign == blockquoteAlign &&
         other.codeblockAlign == codeblockAlign &&
-        other.textScaleFactor == textScaleFactor;
+        other.textScaler == textScaler;
   }
 
   @override
@@ -748,6 +792,7 @@ class MarkdownStyleSheet {
       tableColumnWidth,
       tableCellsPadding,
       tableCellsDecoration,
+      tableVerticalAlignment,
       blockquotePadding,
       blockquoteDecoration,
       codeblockPadding,
@@ -764,6 +809,7 @@ class MarkdownStyleSheet {
       orderedListAlign,
       blockquoteAlign,
       codeblockAlign,
+      textScaler,
       textScaleFactor,
     ]);
   }

@@ -12,6 +12,18 @@ import 'package:markdown/markdown.dart' as md;
 import '../mongol_flutter_markdown.dart';
 import '_functions_io.dart' if (dart.library.html) '_functions_web.dart';
 
+/// Signature for callbacks used by [MarkdownWidget] when
+/// [MarkdownWidget.selectable] is set to true and the user changes selection.
+///
+/// The callback will return the entire block of text available for selection,
+/// along with the current [selection] and the [cause] of the selection change.
+/// This is a wrapper of [SelectionChangedCallback] with additional context
+/// [text] for the caller to process.
+///
+/// Used by [MarkdownWidget.onSelectionChanged]
+typedef MarkdownOnSelectionChangedCallback = void Function(
+    String? text, TextSelection selection, SelectionChangedCause? cause);
+
 /// Signature for callbacks used by [MarkdownWidget] when the user taps a link.
 /// The callback will return the link text, destination, and title from the
 /// Markdown link tag in the document.
@@ -73,10 +85,30 @@ abstract class MarkdownElementBuilder {
   /// Called when an Element has been reached, after its children have been
   /// visited.
   ///
+  /// If [MarkdownWidget.styleSheet] has a style with this tag, it will be
+  /// passed as [preferredStyle].
+  ///
+  /// If parent element has [TextStyle] set, it will be passed as
+  /// [parentStyle].
+  ///
+  /// If a widget build isn't needed, return null.
+  Widget? visitElementAfterWithContext(
+    BuildContext context,
+    md.Element element,
+    TextStyle? preferredStyle,
+    TextStyle? parentStyle,
+  ) {
+    return visitElementAfter(element, preferredStyle);
+  }
+
+  /// Called when an Element has been reached, after its children have been
+  /// visited.
+  ///
   /// If [MarkdownWidget.styleSheet] has a style of this tag, will passing
   /// to [preferredStyle].
   ///
   /// If you needn't build a widget, return null.
+  @Deprecated('Use visitElementAfterWithContext() instead.')
   Widget? visitElementAfter(md.Element element, TextStyle? preferredStyle) =>
       null;
 }
@@ -153,6 +185,7 @@ abstract class MarkdownWidget extends StatefulWidget {
     this.styleSheet,
     this.styleSheetTheme = MarkdownStyleSheetBaseTheme.material,
     this.syntaxHighlighter,
+    this.onSelectionChanged,
     this.onTapLink,
     this.onTapText,
     this.imageDirectory,
@@ -195,6 +228,9 @@ abstract class MarkdownWidget extends StatefulWidget {
 
   /// Called when the user taps a link.
   final MarkdownTapLinkCallback? onTapLink;
+
+  /// Called when the user changes selection when [selectable] is set to true.
+  final MarkdownOnSelectionChangedCallback? onSelectionChanged;
 
   /// Default tap handler used when [selectable] is set to true
   final VoidCallback? onTapText;
@@ -333,6 +369,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget>
       paddingBuilders: widget.paddingBuilders,
       fitContent: widget.fitContent,
       listItemCrossAxisAlignment: widget.listItemCrossAxisAlignment,
+      onSelectionChanged: widget.onSelectionChanged,
       onTapText: widget.onTapText,
       softLineBreak: widget.softLineBreak,
     );
@@ -393,11 +430,9 @@ class MarkdownBody extends MarkdownWidget {
     required super.data,
     super.selectable,
     super.styleSheet,
-    // TODO(stuartmorgan): Remove this once 3.0 is no longer part of the
-    // legacy analysis matrix; it's a false positive there.
-    // ignore: avoid_init_to_null
     super.styleSheetTheme = null,
     super.syntaxHighlighter,
+    super.onSelectionChanged,
     super.onTapLink,
     super.onTapText,
     super.imageDirectory,
@@ -452,11 +487,9 @@ class Markdown extends MarkdownWidget {
     required super.data,
     super.selectable,
     super.styleSheet,
-    // TODO(stuartmorgan): Remove this once 3.0 is no longer part of the
-    // legacy analysis matrix; it's a false positive there.
-    // ignore: avoid_init_to_null
     super.styleSheetTheme = null,
     super.syntaxHighlighter,
+    super.onSelectionChanged,
     super.onTapLink,
     super.onTapText,
     super.imageDirectory,
