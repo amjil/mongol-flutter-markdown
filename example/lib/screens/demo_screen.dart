@@ -3,9 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:mongol/mongol.dart';
-import 'package:mongol_flutter_markdown/mongol_flutter_markdown.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 import '../shared/markdown_demo_widget.dart';
 import '../shared/markdown_extensions.dart';
@@ -32,7 +30,7 @@ class DemoScreen extends StatelessWidget {
             indicatorPadding: const EdgeInsets.only(bottom: 8),
             indicatorSize: TabBarIndicatorSize.label,
             tabs: <Widget>[
-              for (String label in _tabLabels) Tab(text: label),
+              for (final String label in _tabLabels) Tab(text: label),
             ],
           ),
         ),
@@ -58,8 +56,7 @@ class DemoFormattedView extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxHeight: 500),
-        // constraints: const BoxConstraints(),
+        constraints: const BoxConstraints(maxWidth: 1250),
         child: child,
       ),
     );
@@ -78,10 +75,9 @@ class DemoRawDataView extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              child: MongolText(
+              child: Text(
                 snapshot.data!,
                 softWrap: true,
                 style: Theme.of(context)
@@ -113,7 +109,7 @@ class DemoNotesView extends StatelessWidget {
     String? href,
     String title,
   ) async {
-    showDialog<Widget>(
+    await showDialog<Widget>(
       context: context,
       builder: (BuildContext context) =>
           _createDialog(context, text, href, title),
@@ -129,25 +125,24 @@ class DemoNotesView extends StatelessWidget {
       AlertDialog(
         title: const Text('Reference Link'),
         content: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
           child: ListBody(
             children: <Widget>[
-              MongolText(
+              Text(
                 'See the following link for more information:',
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
-              const SizedBox(width: 8),
-              MongolText(
+              const SizedBox(height: 8),
+              Text(
                 'Link text: $text',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              const SizedBox(width: 8),
-              MongolText(
+              const SizedBox(height: 8),
+              Text(
                 'Link destination: $href',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              const SizedBox(width: 8),
-              MongolText(
+              const SizedBox(height: 8),
+              Text(
                 'Link title: $title',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),

@@ -2,9 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mongol_flutter_markdown/mongol_flutter_markdown.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 import '../shared/dropdown_menu.dart' as dropdown;
 import '../shared/markdown_demo_widget.dart';
@@ -125,11 +127,11 @@ class _BasicMarkdownDemoState extends State<BasicMarkdownDemo> {
     String? href,
     String title,
   ) async {
-    showDialog<Widget>(
+    unawaited(showDialog<Widget>(
       context: context,
       builder: (BuildContext context) =>
           _createDialog(context, text, href, title),
-    );
+    ));
   }
 
   Widget _createDialog(

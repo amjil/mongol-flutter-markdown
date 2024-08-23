@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:markdown/markdown.dart' as md;
 
-import '../mongol_flutter_markdown.dart';
+import '../flutter_markdown.dart';
 import '_functions_io.dart' if (dart.library.html) '_functions_web.dart';
 
 /// Signature for callbacks used by [MarkdownWidget] when
@@ -46,7 +46,30 @@ typedef MarkdownCheckboxBuilder = Widget Function(bool value);
 /// Signature for custom bullet widget.
 ///
 /// Used by [MarkdownWidget.bulletBuilder]
-typedef MarkdownBulletBuilder = Widget Function(int index, BulletStyle style);
+typedef MarkdownBulletBuilder = Widget Function(
+  MarkdownBulletParameters parameters,
+);
+
+/// An parameters of [MarkdownBulletBuilder].
+///
+/// Used by [MarkdownWidget.bulletBuilder]
+class MarkdownBulletParameters {
+  /// Creates a new instance of [MarkdownBulletParameters].
+  const MarkdownBulletParameters({
+    required this.index,
+    required this.style,
+    required this.nestLevel,
+  });
+
+  /// The index of the bullet on that nesting level.
+  final int index;
+
+  /// The style of the bullet.
+  final BulletStyle style;
+
+  /// The nest level of the bullet.
+  final int nestLevel;
+}
 
 /// Enumeration sent to the user when calling [MarkdownBulletBuilder]
 ///
@@ -70,6 +93,11 @@ abstract class SyntaxHighlighter {
 
 /// An interface for an element builder.
 abstract class MarkdownElementBuilder {
+  /// For block syntax has to return true.
+  ///
+  /// By default returns false.
+  bool isBlockElement() => false;
+
   /// Called when an Element has been reached, before its children have been
   /// visited.
   void visitElementBefore(md.Element element) {}
@@ -461,11 +489,9 @@ class MarkdownBody extends MarkdownWidget {
       return children.single;
     }
     return Row(
-      // mainAxisSize: shrinkWrap ? MainAxisSize.min : MainAxisSize.max,
-      mainAxisSize:  MainAxisSize.min,
+      mainAxisSize: shrinkWrap ? MainAxisSize.min : MainAxisSize.max,
       crossAxisAlignment:
-          // fitContent ? CrossAxisAlignment.start : CrossAxisAlignment.stretch,
-          CrossAxisAlignment.start,
+          fitContent ? CrossAxisAlignment.start : CrossAxisAlignment.stretch,
       children: children,
     );
   }

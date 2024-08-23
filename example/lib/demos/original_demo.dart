@@ -6,7 +6,7 @@
 // ignore_for_file: avoid_implementing_value_types
 
 import 'package:flutter/material.dart';
-import 'package:mongol_flutter_markdown/mongol_flutter_markdown.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import '../shared/markdown_demo_widget.dart';
 
 // ignore_for_file: public_member_api_docs
